@@ -16,12 +16,26 @@ import {unByKey} from 'ol/Observable.js';
     
 const API_URL = "http://localhost:4000/cities";
 const xhr = new XMLHttpRequest();
-function onRequestHandler(){
+// function onRequestHandler(){
+//   if(this.readyState == 4 && this.status == 200){
+//     console.log(this.response);
+//     const data = JSON.parse(this.response);
+//     data.map(city => addCityFeature(city.longitude,city.latitude));
+//   }
+// }
+async function onRequestHandler(){
   if(this.readyState == 4 && this.status == 200){
     console.log(this.response);
     const data = JSON.parse(this.response);
-    data.map(city => addCityFeature(city.longitude,city.latitude));
+    while(true){
+      console.log('calling json map');
+      data.map(city => addCityFeature(city.longitude,city.latitude));
+      await sleep(4000);
+    }
   }
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 xhr.addEventListener("load", onRequestHandler);
@@ -118,3 +132,4 @@ source.on('addfeature', function (e) {
   flash(e.feature);
 });
 window.setInterval(addFixedFeature, 1000);
+ 

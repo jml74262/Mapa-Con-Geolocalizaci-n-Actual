@@ -1,0 +1,38 @@
+<!-- https://www.w3.org/TR/gyroscope/ --><style>body{ 
+    background:black; 
+    color:white; 
+}
+#ball{ 
+    position: absolute; 
+    border-radius: 100%; 
+    outline: #FFF dashed 20px; 
+    background: radial-gradient(#fff7a7,#ffd100); 
+    width: 150px; 
+    height: 150px; 
+    left: 45%; 
+    top: 35%;
+    transition: left 0.2s linear, top 0.2s linear, transform 0.2s linear;
+}
+</style><div id="report_box"></div><div id="ball"></div><script>    let sensor = new Gyroscope();
+    let x, y, z, report;
+    sensor.start();
+    sensor.onreading = () => {
+        report = "X-axis Angle Velocity: " + sensor.x + "<br>";
+        report += "Y-axis Angle Velocity: " + sensor.y + "<br>";
+        report += "Z-axis Angle Velocity: " + sensor.z + "<br>";
+        report += "Ball current X = "+ball.offsetLeft+"<br>";
+        report += "Ball current Y= "+ball.offsetTop+"<br>";
+        report += "Ball current Rotation= "+z+"deg<br>";
+        report_box.innerHTML = report;
+        x = sensor.x * 100;
+        y = sensor.y * 100;
+        z = sensor.z * -33;
+        ball.style.left = (ball.offsetLeft + x)+"px";
+        ball.style.top = (ball.offsetTop - y)+"px";
+        ball.style.transform = "rotate("+z+"deg)";
+    };
+    sensor.onerror = errorHandler;
+    function errorHandler(event){
+        console.log(event.error.name, event.error.message);
+    }
+</script>
